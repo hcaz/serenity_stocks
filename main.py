@@ -63,7 +63,8 @@ async def get_stocks():
     """
     stocks = []
     cursor = stock_collection.find({})  # Fetch all documents
-    for document in await cursor.to_list(length=100):  # Limit to 100 documents for now
+    cursor = list(cursor)
+    for document in cursor:  # Limit to 100 documents for now
         stocks.append(Stock(**document))
     return stocks
 
