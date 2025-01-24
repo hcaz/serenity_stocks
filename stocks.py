@@ -1,3 +1,4 @@
+import json
 from fastapi import HTTPException
 from Stock import DataNode, Stock
 from AtlasClient import getClient
@@ -43,95 +44,24 @@ def add_stock(stock: Stock):
 
 def reset_stocks():
     stock_collection.delete_many({})
-    amazon = Stock(
-        name="Amazon",
-        symbol="AMZN",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
-    yahoo = Stock(
-        name="Yahoo",
-        symbol="YHOO",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
-    ebay = Stock(
-        name="eBay",
-        symbol="EBAY",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
-    myspace = Stock(
-        name="MySpace",
-        symbol="MSP",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
-    petscom = Stock(
-        name="pets.com",
-        symbol="PCOM",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
-    cisco = Stock(
-        name="Cisco",
-        symbol="CSCO",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
-    microsoft = Stock(
-        name="Microsoft",
-        symbol="MSFT",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
-    apple = Stock(
-        name="Apple",
-        symbol="AAPL",
-        historic_data=[
-            DataNode(
-                date=0,
-                price=26800
-            )
-        ]
-    )
 
-    stock_collection.insert_many([
-        amazon.dict(),
-        yahoo.dict(),
-        ebay.dict(),
-        myspace.dict(),
-        petscom.dict(),
-        cisco.dict(),
-        microsoft.dict(),
-        apple.dict()
-    ])
+    myStocks = []
+    with open("stocks.json", "r") as json_file:
+        stock_data = json.load(json_file)
+        for stock_json in stock_data:
+            historic_data = []
+            for data_node_json in stock_json['historic_data']:
+                data_node = DataNode(
+                    date = data_node_json['date'], 
+                    price = data_node_json['price'],
+                )
+                historic_data.append(data_node)
+            stock = Stock(
+                name = stock_json['name'], 
+                symbol = stock_json['symbol'], 
+                historic_data = historic_data,
+            )
+            myStocks.append(stock.dict())
+
+    stock_collection.insert_many(myStocks)
     return
