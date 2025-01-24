@@ -4,7 +4,7 @@ from pymongo import MongoClient
 from dotenv import dotenv_values
 
 from Stock import Stock
-from stocks import add_stock, get_stock, get_stocks
+from stocks import add_stock, get_stock, get_stocks, reset_stocks
 
 # Load environment variables (including MongoDB Atlas connection string)
 config = dotenv_values(".env")
@@ -44,3 +44,7 @@ def get_stock_endpoint(symbol: str):
 @app.post("/stocks/", response_model=Stock)
 def add_stock_endpoint(stock: Stock): 
     return add_stock(stock) 
+
+@app.post("/stocks/reset")
+def reset_all_stocks_endpoint(stock: Stock): 
+    return reset_stocks() 

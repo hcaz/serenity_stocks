@@ -41,7 +41,7 @@ def add_stock(stock: Stock):
     print(result)
     return Stock(**stock_dict)
 
-def resetAllStocks():
+def reset_stocks():
     stock_collection.delete_many({})
     amazon = Stock(
         name="Amazon",
