@@ -63,7 +63,8 @@ async def get_stocks():
     """
     stocks = []
     cursor = stock_collection.find({})  # Fetch all documents
-    for document in await cursor.to_list(length=100):  # Limit to 100 documents for now
+    cursor = list(cursor)
+    for document in cursor:  # Limit to 100 documents for now
         stocks.append(Stock(**document))
     return stocks
 
@@ -73,7 +74,7 @@ async def get_stock(symbol: str):
     """
     Fetch a single stock document by symbol.
     """
-    stock = await stock_collection.find_one({"symbol": symbol})
+    stock = stock_collection.find_one({"symbol": symbol})
     if stock:
         return Stock(**stock)
     raise HTTPException(status_code=404, detail="Stock not found")
@@ -89,5 +90,5 @@ async def add_stock(stock: Stock):
     # For this example, we'll just use the data provided in the request body
     stock_dict = stock.dict()
     stock_dict["date_added"] = datetime.datetime.now()
-    result = await stock_collection.insert_one(stock_dict)
+    result = stock_collection.insert_one(stock_dict)
     return Stock(**stock_dict)
