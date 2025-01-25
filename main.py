@@ -14,7 +14,7 @@ from users import login, profile
 from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
 from Notification import Notification
 from notifications import get_notifications, read_notification
-from stocks import add_stock, get_stock, get_stocks, reset_stocks
+from stocks import get_stock, get_stocks, reset_stocks
 
 # Load environment variables (including MongoDB Atlas connection string)
 config = dotenv_values(".env")
