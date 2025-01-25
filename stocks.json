@@ -4,10 +4,10 @@
       "symbol": "AMZN",
       "category": "TECH",
       "max_shares": 10000000,
-      "available_shares": 5000000,
+      "available_shares": 6000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
         }
       ]
@@ -16,11 +16,11 @@
       "name": "Yahoo",
       "symbol": "YHOO",
       "category": "TECH",
-      "max_shares": 10000000,
-      "available_shares": 5000000,
+      "max_shares": 12000000,
+      "available_shares": 7000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
         }
       ]
@@ -29,11 +29,11 @@
       "name": "eBay",
       "symbol": "EBAY",
       "category": "TECH",
-      "max_shares": 10000000,
-      "available_shares": 5000000,
+      "max_shares": 15000000,
+      "available_shares": 8000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
         }
       ]
@@ -42,11 +42,11 @@
       "name": "MySpace",
       "symbol": "MSP",
       "category": "TECH",
-      "max_shares": 10000000,
-      "available_shares": 5000000,
+      "max_shares": 18000000,
+      "available_shares": 9000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
         }
       ]
@@ -55,11 +55,11 @@
       "name": "pets.com",
       "symbol": "PCOM",
       "category": "TECH",
-      "max_shares": 10000000,
-      "available_shares": 5000000,
+      "max_shares": 20000000,
+      "available_shares": 10000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
         }
       ]
@@ -68,11 +68,11 @@
       "name": "Cisco",
       "symbol": "CSCO",
       "category": "TECH",
-      "max_shares": 10000000,
-      "available_shares": 5000000,
+      "max_shares": 25000000,
+      "available_shares": 12000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
         }
       ]
@@ -81,11 +81,11 @@
       "name": "Microsoft",
       "symbol": "MSFT",
       "category": "TECH",
-      "max_shares": 10000000,
-      "available_shares": 5000000,
+      "max_shares": 30000000,
+      "available_shares": 15000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
         }
       ]
@@ -94,12 +94,272 @@
       "name": "Apple",
       "symbol": "AAPL",
       "category": "TECH",
-      "max_shares": 10000000,
-      "available_shares": 5000000,
+      "max_shares": 35000000,
+      "available_shares": 18000000,
       "historic_data": [
         {
-          "date": 0,
+          "date": 1737805562,
           "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "AOL",
+      "symbol": "AOL",
+      "category": "TECH",
+      "max_shares": 40000000,
+      "available_shares": 20000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 15000
+        }
+      ]
+    },
+    {
+      "name": "Netscape",
+      "symbol": "NSCP",
+      "category": "TECH",
+      "max_shares": 45000000,
+      "available_shares": 22000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 8000
+        }
+      ]
+    },
+    {
+      "name": "Sun Microsystems",
+      "symbol": "SUNW",
+      "category": "TECH",
+      "max_shares": 50000000,
+      "available_shares": 25000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 12000
+        }
+      ]
+    },
+    {
+      "name": "Oracle",
+      "symbol": "ORCL",
+      "category": "TECH",
+      "max_shares": 55000000,
+      "available_shares": 28000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 45000
+        }
+      ]
+    },
+    {
+      "name": "Intel",
+      "symbol": "INTC",
+      "category": "TECH",
+      "max_shares": 60000000,
+      "available_shares": 30000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 30000
+        }
+      ]
+    },
+    {
+      "name": "Dell",
+      "symbol": "DELL",
+      "category": "TECH",
+      "max_shares": 65000000,
+      "available_shares": 32000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 35000
+        }
+      ]
+    },
+    {
+      "name": "Qualcomm",
+      "symbol": "QCOM",
+      "category": "TECH",
+      "max_shares": 70000000,
+      "available_shares": 35000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 70000
+        }
+      ]
+    },
+    {
+      "name": "Nokia",
+      "symbol": "NOK",
+      "category": "TELECOM",
+      "max_shares": 10000000,
+      "available_shares": 6000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 6000
+        }
+      ]
+    },
+    {
+      "name": "Motorola",
+      "symbol": "MOT",
+      "category": "TELECOM",
+      "max_shares": 12000000,
+      "available_shares": 7000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 14000
+        }
+      ]
+    },
+    {
+      "name": "Ericsson",
+      "symbol": "ERIC",
+      "category": "TELECOM",
+      "max_shares": 15000000,
+      "available_shares": 8000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 9000
+        }
+      ]
+    },
+    {
+      "name": "Blockbuster",
+      "symbol": "BLOK",
+      "category": "RETAIL",
+      "max_shares": 10000000,
+      "available_shares": 6000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 4000
+        }
+      ]
+    },
+    {
+      "name": "Circuit City",
+      "symbol": "CC",
+      "category": "RETAIL",
+      "max_shares": 12000000,
+      "available_shares": 7000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 3000
+        }
+      ]
+    },
+    {
+      "name": "Borders",
+      "symbol": "BOR",
+      "category": "RETAIL",
+      "max_shares": 15000000,
+      "available_shares": 8000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 2000
+        }
+      ]
+    },
+    {
+      "name": "Barnes & Noble",
+      "symbol": "BKS",
+      "category": "RETAIL",
+      "max_shares": 18000000,
+      "available_shares": 9000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 2500
+        }
+      ]
+    },
+    {
+      "name": "Toys \"R\" Us",
+      "symbol": "TOYS",
+      "category": "RETAIL",
+      "max_shares": 20000000,
+      "available_shares": 10000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 5000
+        }
+      ]
+    },
+    {
+      "name": "Netflix",
+      "symbol": "NFLX",
+      "category": "MEDIA/ENT",
+      "max_shares": 10000000,
+      "available_shares": 6000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 6000
+        }
+      ]
+    },
+    {
+      "name": "RealNetworks",
+      "symbol": "RNWK",
+      "category": "MEDIA/ENT",
+      "max_shares": 12000000,
+      "available_shares": 7000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 3000
+        }
+      ]
+    },
+    {
+      "name": "Napster",
+      "symbol": "NAPS",
+      "category": "MEDIA/ENT",
+      "max_shares": 15000000,
+      "available_shares": 8000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 1000
+        }
+      ]
+    },
+    {
+      "name": "Palm",
+      "symbol": "PALM",
+      "category": "TECH",
+      "max_shares": 18000000,
+      "available_shares": 9000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 9000
+        }
+      ]
+    },
+    {
+      "name": "Blackberry",
+      "symbol": "BB",
+      "category": "TELECOM",
+      "max_shares": 20000000,
+      "available_shares": 10000000,
+      "historic_data": [
+        {
+          "date": 1737805562,
+          "price": 11000
         }
       ]
     }

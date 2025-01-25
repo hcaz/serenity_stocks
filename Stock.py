@@ -3,7 +3,7 @@ from pydantic import BaseModel
 # Pydantic model for stock data
 
 class DataNode(BaseModel):
-    date: int
+    date: float
     price: int
 
 class Stock(BaseModel):
