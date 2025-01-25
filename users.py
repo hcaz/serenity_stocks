@@ -3,8 +3,19 @@ from User import User
 from AtlasClient import getClient
 
 import time
+import random
 
 user_collection = getClient().get_collection("serenity_stocks", "users")
+notification_collection = getClient().get_collection("serenity_stocks", "notifications")
+
+slogans = [
+    "Play the market. Play dirty.",
+    "Risk everything. Regret nothing."
+    "The only limit is your morality.",
+    "The market doesn't care about your conscience.",
+    "Success at all costs. Morality is optional.",
+    "We'll handle the ethics. You handle the profits.",
+]
 
 def login(email: str):
     existing_user = user_collection.find_one({"email": email})
@@ -23,7 +34,17 @@ def login(email: str):
         user_dict["joined"] = time.time()
         user_dict["budget_remaining"] = 1000 * 100
         user_dict["balance"] = 100 * 100
-        user_collection.insert_one(user_dict)
+        result = user_collection.insert_one(user_dict)
+
+        notification_dict = {}
+        notification_dict['sender'] = 'hr'
+        notification_dict['recipient'] = result.inserted_id
+        notification_dict['subject'] = 'Welcome to Serenity Stocks'
+        notification_dict['message'] = random.choice(slogans)
+        notification_dict['read'] = False
+        notification_dict['timestamp'] = time.time()
+        notification_collection.insert_one(notification_dict)
+
         return User(**user_dict)
 
 def profile(email: str):
