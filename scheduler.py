@@ -1,4 +1,5 @@
 import math
+import random
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
@@ -25,9 +26,13 @@ def ticker():
                 }
             })
             all_news = list(all_news)
-            # if len(all_news) > 0:
-            #     # if n docs returned chance to generate = 1/(n^2+1)
-            # else:
+            if len(all_news) > 0:
+                random_int = random.randint(0, (len(all_news)^2) + 1)
+                if random_int == 1:
+                    # if n docs returned chance to generate = 1/(n^2+1)
+                    print("Generating more news")
+            else:
+                print("Generating first news")
                 # first run
                 # realocate budgets
                 # if none returned generate new
