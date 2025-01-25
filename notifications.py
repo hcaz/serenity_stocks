@@ -79,7 +79,7 @@ def reply_to_notification(id: ObjectId, reply: NotificationReply):
 
                 previous_messages = ''.join(previous_messages)
 
-                response = model.generate_content(senderObj.personality_prompt+"\n\nYour general tone is " + senderObj.tone + ". You are speaking to "+recipientObj.name+" who is a "+recipientObj.job_role+".\n\nCompose an email response with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt. You are responding to the following conversation, your messages are identified by "+senderObj.email+":\n"+previous_messages+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
+                response = model.generate_content(senderObj.personality_prompt+"\n\nYour general tone is " + senderObj.tone + ". You are speaking to "+recipientObj.name+" who is a "+recipientObj.job_role+".\n\nSubject:"+existing_notification['subject']+"\n\nCompose an email response with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt. You are responding to the following conversation, your messages are identified by "+senderObj.email+":\n"+previous_messages+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
                 message = response.text
                 reply_dict = {}
                 reply_dict['sender'] = senderObj.email
@@ -104,7 +104,7 @@ def create_notification(sender: str, recipient: str, subject: str, message: str,
         recipientObj = User(**recipientObj)
 
         if senderObj.personality_prompt:
-            response = model.generate_content(senderObj.personality_prompt+"\n\nYour general tone is " + senderObj.tone + ". You are speaking to "+recipientObj.name+" who is a "+recipientObj.job_role+".\n\nCompose an email response with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt, you should sign your email off with your name and role. "+additionalPrompt+" You need to say the following message:\n"+message+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
+            response = model.generate_content(senderObj.personality_prompt+"\n\nYour general tone is " + senderObj.tone + ". You are speaking to "+recipientObj.name+" who is a "+recipientObj.job_role+".\n\nSubject:"+subject+"\n\nCompose an email response with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt, you should sign your email off with your name and role. "+additionalPrompt+" You need to say the following message:\n"+message+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
             message = response.text
 
         notification_dict = {}
@@ -127,7 +127,7 @@ def create_notification(sender: str, recipient: str, subject: str, message: str,
 
                 previous_messages = ''.join(previous_messages)
 
-                response = model.generate_content(recipientObj.personality_prompt+"\n\nYour general tone is " + recipientObj.tone + ". You are speaking to "+senderObj.name+" who is a "+senderObj.job_role+".\n\nCompose an email response with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt. You are responding to the following conversation, your messages are identified by "+recipientObj.email+":\n"+previous_messages+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
+                response = model.generate_content(recipientObj.personality_prompt+"\n\nYour general tone is " + recipientObj.tone + ". You are speaking to "+senderObj.name+" who is a "+senderObj.job_role+".\n\nSubject:"+subject+"\n\nCompose an email response with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt. You are responding to the following conversation, your messages are identified by "+recipientObj.email+":\n"+previous_messages+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
                 message = response.text
                 reply_dict = {}
                 reply_dict['sender'] = senderObj.email
