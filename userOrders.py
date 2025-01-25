@@ -2,6 +2,7 @@ import time
 import uuid
 
 from bson import ObjectId
+from fastapi import HTTPException
 from pymongo import UpdateOne
 from AtlasClient import getClient
 from Stock import DataNode, Stock
@@ -11,8 +12,13 @@ from UserStock import UserStock
 orders_collection = getClient().get_collection("serenity_stocks", "user_orders")
 user_stocks_collection = getClient().get_collection("serenity_stocks", "user_stocks")
 stocks_collection = getClient().get_collection("serenity_stocks", "stocks")
+user_collection = getClient().get_collection("serenity_stocks", "users")
 
 def get_open_orders(email: str):
+    existing_user = user_collection.find_one({"email": email})
+    if not existing_user:
+        raise HTTPException(status_code=404, detail="User not found")
+
     orders = []
     cursor = orders_collection.find({
         "email": email,
@@ -24,6 +30,13 @@ def get_open_orders(email: str):
     return orders
 
 def add_order(order: UserOrder):
+    existing_user = user_collection.find_one({"email": order.email})
+    existing_stock = stocks_collection.find_one({"symbol": order.symbol})
+    if not existing_user :
+        raise HTTPException(status_code=404, detail="User not found")
+    if not existing_stock:
+        raise HTTPException(status_code=404, detail="Stock not found")
+    
     order_dict = order.dict()
     order_dict["id"] = str(uuid.uuid4())
     order_dict["created_at"] = time.time()
