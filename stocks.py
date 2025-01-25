@@ -39,7 +39,7 @@ def add_stock(stock: Stock):
     # and chart data from an external API or data source
     # For this example, we'll just use the data provided in the request body
     stock_dict = stock.dict()
-    stock_dict["date_added"] = datetime.datetime.now()
+    stock_dict["date_added"] = time.time()
     result = stock_collection.insert_one(stock_dict)
     print(result)
     return Stock(**stock_dict)
