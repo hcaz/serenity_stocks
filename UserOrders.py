@@ -1,12 +1,23 @@
-from typing import Optional
-from pydantic import BaseModel
-from bson import ObjectId
+import time
+from AtlasClient import getClient
+from UserOrder import UserOrder
 
-class UserOrder(BaseModel):
-    userId: ObjectId
-    symbol: str
-    category: str
-    quantity: int
-    price: Optional[int] = None
-    created_at: float
-    completed_at: Optional[float] = None
+orders_collection = getClient().get_collection("serenity_stocks", "user_orders")
+
+def get_open_orders(email: str):
+    orders = []
+    cursor = orders_collection.find({
+        "email": email,
+        "completed_at": None,
+    })
+    cursor = list(cursor)
+    for document in cursor:
+        orders.append(UserOrder(**document))
+    return orders
+
+def add_order(order: UserOrder):
+    order_dict = order.dict()
+    order_dict["created_at"] = time.time()
+    result = orders_collection.insert_one(order_dict)
+    print(result)
+    return UserOrder(**order_dict)
