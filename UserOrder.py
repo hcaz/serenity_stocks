@@ -3,7 +3,7 @@ from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field, field_serializer
 
 class UserOrder(BaseModel):
-    id: ObjectId = Field(alias="_id", default=None) 
+    # id: ObjectId = Field(alias="_id", default=None) 
     email: str
     symbol: str
     category: str
@@ -12,11 +12,11 @@ class UserOrder(BaseModel):
     created_at: Optional[float] = None
     completed_at: Optional[float] = None
 
-    model_config = ConfigDict(
-        arbitrary_types_allowed=True,
-        exclude={id}
-    )
+    # model_config = ConfigDict(
+    #     arbitrary_types_allowed=True,
+    #     exclude={id}
+    # )
 
-    def dict(self, *args, **kwargs):
-        kwargs['exclude'] = {'id'}
-        return super().dict(*args, **kwargs)
+    # def dict(self, *args, **kwargs):
+    #     kwargs['exclude'] = {'id'}
+    #     return super().dict(*args, **kwargs)

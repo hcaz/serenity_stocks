@@ -17,7 +17,7 @@ from notifications import get_notifications, read_notification
 from stocks import get_stock, get_stocks, reset_stocks
 from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
 from Notification import Notification, NotificationReply
-from notifications import get_notifications, read_notification, reply_to_notification
+from notifications import get_notifications, read_notification, reply_to_notification, create_notification
 from stocks import add_stock, get_stock, get_stocks, reset_stocks
 
 # Load environment variables (including MongoDB Atlas connection string)
@@ -61,6 +61,10 @@ def get_profile_endpoint(email: str):
 @app.post("/users/reset")
 def reset_all_users_endpoint(): 
     return reset_users() 
+
+@app.post("/notification/{sender}/{recipient}", response_model=Notification)
+def create_notifications_endpoint(sender: str, recipient: str, subject: str, message: str):
+    return create_notification(sender, recipient, subject, message)
 
 @app.get("/notifications/{email}", response_model=list[Notification])
 def get_notifications_endpoint(email: str):

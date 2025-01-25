@@ -31,7 +31,6 @@ def login(email: str):
 
         create_notification('emily.hughes@serenitystocks.com', email, 'Welcome to Serenity Stocks', "We know you're eager to get started, and we'll be sending you more information about your role and what to expect very shortly.\n\nBut first, we'd love to get to know you a little better.  Could you reply to this email and let us know your name?", additionalPrompt="You should not use the players name in this email as they have not sent it yet")
         create_notification('michael.rodriguez@serenitystocks.com', email, 'Intro', "Welcome, now that your on my team you better be ready to play hard and work harder! As you make more trades your daily budget will grow, its all about profit here so dont make a loss no matter what!", additionalPrompt="You should not use the players name in this email as they have not sent it yet")
-        create_notification('truthseekerbob@email.com', email, 'WHO ARE YOU!>!', "Who are you, what have you dene before, are you here to rig the market?", additionalPrompt="You should not use the players name in this email as they have not sent it yet")
 
         return User(**user_dict)
 
