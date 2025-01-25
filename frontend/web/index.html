@@ -29,10 +29,20 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
-  <title>frontend</title>
+  <title>Serenity Stocks</title>
   <link rel="manifest" href="manifest.json">
+
+  <!-- Add the stylesheet to the head -->
+  <link rel="stylesheet" type="text/css" href="clippy.css">
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>
+
+  <script src="clippy.js"></script>
+
+  <script>
+    window.clippyInit = function(){ clippy.init(); }
+    window.clippySpeak = function(message){ clippy.displayMessage(message); }
+  </script>
 </body>
 </html>
