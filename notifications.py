@@ -21,10 +21,10 @@ def get_notifications(email: str):
         user_collection.replace_one({"email": email}, existing_user)
 
         notifications = []
-        cursor = notification_collection.find({'recipient': ObjectId(existing_user['_id'])})  # Fetch all documents
+        cursor = notification_collection.find({'recipient': email})  # Fetch all documents
         cursor = list(cursor)
         for document in cursor:
-            sending_user = user_collection.find_one({"_id": ObjectId(document['sender'])})
+            sending_user = user_collection.find_one({"email": document['sender']})
             if sending_user:
                 document['recipient'] = existing_user
                 document['sender'] = sending_user

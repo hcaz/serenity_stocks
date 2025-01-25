@@ -37,11 +37,26 @@ def login(email: str):
         result = user_collection.insert_one(user_dict)
 
         notification_dict = {}
-        notification_dict['sender'] = 'hr'
-        notification_dict['recipient'] = result.inserted_id
+        notification_dict['sender'] = email
+        notification_dict['recipient'] = email
         notification_dict['subject'] = 'Welcome to Serenity Stocks'
-        notification_dict['message'] = random.choice(slogans)
-        notification_dict['read'] = False
+        notification_dict['message'] = """Hi there,
+
+Welcome to Serenity Stocks! We're thrilled to have you join our team.
+
+We know you're eager to get started, and we'll be sending you more information about your role and what to expect very shortly.
+
+But first, we'd love to get to know you a little better.  Could you reply to this email and let us know your name?
+
+We're excited to have you on board and can't wait to see what you'll achieve here.
+
+Best regards,
+---
+
+"""+random.choice(slogans)
+        notification_dict['read_by_user'] = False
+        notification_dict['read_by_system'] = False
+        notification_dict['replies'] = []
         notification_dict['timestamp'] = time.time()
         notification_collection.insert_one(notification_dict)
 
