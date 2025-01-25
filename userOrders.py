@@ -1,4 +1,5 @@
 import time
+import uuid
 
 from bson import ObjectId
 from pymongo import UpdateOne
@@ -24,6 +25,7 @@ def get_open_orders(email: str):
 
 def add_order(order: UserOrder):
     order_dict = order.dict()
+    order_dict["id"] = str(uuid.uuid4())
     order_dict["created_at"] = time.time()
     result = orders_collection.insert_one(order_dict)
     print(result)
@@ -78,7 +80,7 @@ def compute_open_orders():
 
         user_stocks_collection.update_one(filter_query, {"$set":targetUserStock.dict()}, upsert=True)
 
-        orders_collection.replace_one({"_id": ObjectId(order.id)}, order.dict())
+        orders_collection.replace_one({"id": order.id}, order.dict())
 
         newPrice = calculate_updated_price(stock, order)
         print(newPrice)
