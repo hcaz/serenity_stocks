@@ -5,6 +5,9 @@ from dotenv import dotenv_values
 
 from Stock import Stock
 from stocks import add_stock, get_stock, get_stocks
+from User import User
+from users import login, profile
+
 
 # Load environment variables (including MongoDB Atlas connection string)
 config = dotenv_values(".env")
@@ -30,7 +33,16 @@ app.add_middleware(
 async def shutdown_db_client():
     app.mongodb_client.client.close()
 
+#User endpoints
+@app.get("/login/{email}", response_model=User)
+def add_login_endpoint(email: str): 
+    return login(email) 
 
+@app.get("/profile/{email}", response_model=User)
+def get_profile_endpoint(email: str):
+    return profile(email)
+
+#Stock endpoints
 @app.get("/stocks/", response_model=list[Stock])
 def get_stocks_endpoint():
     return get_stocks()
