@@ -4,6 +4,7 @@ from pymongo import MongoClient
 from dotenv import dotenv_values
 from bson import ObjectId
 
+from News import News
 from Stock import Stock
 from User import User
 from UserOrder import UserOrder
@@ -114,6 +115,6 @@ def pop_endpoint():
 def reset_all_news_endpoint(): 
     return reset_news() 
 
-@app.get("/news/random")
+@app.get("/news/random", response_model=News)
 def generate_random_news_endpoint(): 
     return generate_random_article() 
