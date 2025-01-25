@@ -8,4 +8,3 @@ class News(BaseModel):
     affected_stocks: list[str]
     affected_categories: list[str]
     timestamp: float
-    

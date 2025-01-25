@@ -1,0 +1,32 @@
+[
+  {
+    "name": "The New York Times",
+    "tone": "Serious, Analytical",
+    "style": "Formal, Journalistic",
+    "bias": "Center-Left",
+      "examples": [
+        "Dow Jones Soars to Record High Amid Tech Boom",
+        "Analysis: Will the Bull Market Continue into 2025?"
+      ]
+  },
+  {
+    "name": "Fox News",
+    "tone": "Sensationalist, Outraged",
+    "style": "Informal, Opinionated",
+    "bias": "Right-Leaning",
+      "examples": [
+        "Stock Market Crash Imminent? Experts Warn of Bubble",
+        "Exclusive: Insider Trading Scandal Rocks Wall Street"
+      ]
+  },
+  {
+    "name": "The Onion",
+    "tone": "Humorous, Satirical",
+    "style": "Informal, Exaggerated",
+    "bias": "Satirical",
+      "examples": [
+        "Local Dogecoin Millionaire Barks at the Moon",
+        "Experts Baffled as Tulip Bulb Mania Returns, This Time With Crypto"
+      ]
+  }
+]

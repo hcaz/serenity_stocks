@@ -7,6 +7,7 @@ from bson import ObjectId
 from Stock import Stock
 from User import User
 from UserOrder import UserOrder
+from newsGenerator import generate_random_article, reset_news
 from scheduler import scheduler
 from userOrders import add_order, get_open_orders
 from users import login, profile, reset_users
@@ -108,3 +109,11 @@ def create_user_order_endpoint(order: UserOrder):
 @app.get("/pop/")
 def pop_endpoint():
     return burst_the_bubble()
+
+@app.post("/news/reset")
+def reset_all_news_endpoint(): 
+    return reset_news() 
+
+@app.get("/news/random")
+def generate_random_news_endpoint(): 
+    return generate_random_article() 
