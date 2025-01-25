@@ -11,7 +11,7 @@ from scheduler import scheduler
 from userOrders import add_order, get_open_orders
 from users import login, profile
 
-from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
+from stocks import burst_the_bubble, get_stock, get_stocks, reset_stocks, tick_stocks
 from Notification import Notification
 from notifications import get_notifications, read_notification
 from stocks import get_stock, get_stocks, reset_stocks
@@ -87,3 +87,7 @@ def get_open_orders_endpoint(email: str):
 @app.post("/orders/", response_model=UserOrder)
 def create_user_order_endpoint(order: UserOrder): 
     return add_order(order) 
+
+@app.get("/pop/")
+def pop_endpoint():
+    return burst_the_bubble()

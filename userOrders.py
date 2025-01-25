@@ -1,11 +1,14 @@
 import time
 
+from bson import ObjectId
 from pymongo import UpdateOne
 from AtlasClient import getClient
 from Stock import DataNode, Stock
 from UserOrder import UserOrder
+from UserStock import UserStock
 
 orders_collection = getClient().get_collection("serenity_stocks", "user_orders")
+user_stocks_collection = getClient().get_collection("serenity_stocks", "user_stocks")
 stocks_collection = getClient().get_collection("serenity_stocks", "stocks")
 
 def get_open_orders(email: str):
@@ -32,9 +35,18 @@ def compute_open_orders():
     })
     all_open_orders = list(all_open_orders)
     all_open_orders = [UserOrder(**document) for document in all_open_orders]
+
     all_stocks = stocks_collection.find({})
     all_stocks = list(all_stocks)
     all_stocks = [Stock(**document) for document in all_stocks]
+
+    user_stocks = user_stocks_collection.find({
+        "email": {
+            "$in": [o.email for o in all_open_orders]
+        },
+    })
+    user_stocks = list(user_stocks)
+    user_stocks = [UserStock(**document) for document in user_stocks]
 
     for order in all_open_orders:
         # first stock in all stocks where stock.symbol == order.symbol
@@ -45,7 +57,28 @@ def compute_open_orders():
         stock.available_shares = stock.available_shares - order.quantity
         order.price = stock.historic_data[-1].price
         order.completed_at = time.time()
-        orders_collection.replace_one({"symbol": order.symbol}, order.dict())
+
+        targetUserStock = next((userStock for userStock in user_stocks if userStock.symbol == order.symbol and userStock.email == order.email), None)
+        if targetUserStock is None:
+            targetUserStock = UserStock(
+                email = order.email,
+                symbol = order.symbol,
+                category = order.category,
+                quantity = 0,
+                purchase_log=[],
+            )
+        
+        targetUserStock.quantity = targetUserStock.quantity + order.quantity
+        targetUserStock.purchase_log.append(order)
+        targetUserStock.updated_at = time.time()
+        filter_query = {
+            "symbol": order.symbol,
+            "email": order.email,
+        }
+
+        user_stocks_collection.update_one(filter_query, {"$set":targetUserStock.dict()}, upsert=True)
+
+        orders_collection.replace_one({"_id": ObjectId(order.id)}, order.dict())
 
         newPrice = calculate_updated_price(stock, order)
         print(newPrice)

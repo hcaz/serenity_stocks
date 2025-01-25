@@ -1,5 +1,5 @@
 from typing import Optional, Any
-from pydantic import BaseModel, field_serializer
+from pydantic import BaseModel
 from UserOrder import UserOrder
 
 class UserStock(BaseModel):
