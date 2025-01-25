@@ -1,0 +1,82 @@
+[
+    {
+      "name": "Amazon",
+      "symbol": "AMZN",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "Yahoo",
+      "symbol": "YHOO",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "eBay",
+      "symbol": "EBAY",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "MySpace",
+      "symbol": "MSP",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "pets.com",
+      "symbol": "PCOM",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "Cisco",
+      "symbol": "CSCO",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "Microsoft",
+      "symbol": "MSFT",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    },
+    {
+      "name": "Apple",
+      "symbol": "AAPL",
+      "historic_data": [
+        {
+          "date": 0,
+          "price": 26800
+        }
+      ]
+    }
+  ]

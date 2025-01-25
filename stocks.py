@@ -1,5 +1,6 @@
+import json
 from fastapi import HTTPException
-from Stock import Stock
+from Stock import DataNode, Stock
 from AtlasClient import getClient
 
 import datetime
@@ -13,7 +14,7 @@ def get_stocks():
     stocks = []
     cursor = stock_collection.find({})  # Fetch all documents
     cursor = list(cursor)
-    for document in cursor:  # Limit to 100 documents for now
+    for document in cursor:
         stocks.append(Stock(**document))
     return stocks
 
@@ -40,3 +41,27 @@ def add_stock(stock: Stock):
     result = stock_collection.insert_one(stock_dict)
     print(result)
     return Stock(**stock_dict)
+
+def reset_stocks():
+    stock_collection.delete_many({})
+
+    myStocks = []
+    with open("stocks.json", "r") as json_file:
+        stock_data = json.load(json_file)
+        for stock_json in stock_data:
+            historic_data = []
+            for data_node_json in stock_json['historic_data']:
+                data_node = DataNode(
+                    date = data_node_json['date'], 
+                    price = data_node_json['price'],
+                )
+                historic_data.append(data_node)
+            stock = Stock(
+                name = stock_json['name'], 
+                symbol = stock_json['symbol'], 
+                historic_data = historic_data,
+            )
+            myStocks.append(stock.dict())
+
+    stock_collection.insert_many(myStocks)
+    return
