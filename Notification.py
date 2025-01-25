@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 
 from User import User
+from bson import ObjectId
 
 class NotificationReply(BaseModel):
     by: str
@@ -9,6 +10,7 @@ class NotificationReply(BaseModel):
 
 # Pydantic model for notification data
 class Notification(BaseModel):
+    _id: ObjectId
     sender: User
     recipient: User
     subject: str

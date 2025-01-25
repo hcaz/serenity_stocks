@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 from dotenv import dotenv_values
+from bson import ObjectId
 
 from Stock import Stock
 from User import User
@@ -11,7 +12,7 @@ from users import login, profile
 
 from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
 from Notification import Notification
-from notifications import get_notifications
+from notifications import get_notifications, read_notification
 from stocks import add_stock, get_stock, get_stocks, reset_stocks
 
 # Load environment variables (including MongoDB Atlas connection string)
@@ -50,6 +51,10 @@ def get_profile_endpoint(email: str):
 @app.get("/notifications/{email}", response_model=list[Notification])
 def get_notifications_endpoint(email: str):
     return get_notifications(email)
+
+@app.get("/notification/{id}/read", response_model=Notification)
+def get_notification_read_endpoint(id: str):
+    return read_notification(ObjectId(id))
 
 #Stock endpoints
 @app.get("/stocks/", response_model=list[Stock])

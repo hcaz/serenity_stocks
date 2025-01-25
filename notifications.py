@@ -32,3 +32,24 @@ def get_notifications(email: str):
         return notifications
     else:
         raise HTTPException(status_code=404, detail="User not found")
+    
+def read_notification(id: ObjectId):
+    """
+    Fetch a list of notification documents.
+    """
+
+    existing_notification = notification_collection.find_one({"_id": id})
+    if existing_notification:
+        existing_notification["read_by_user"] = True
+        notification_collection.replace_one({"_id": id}, existing_notification)
+        sending_user = user_collection.find_one({"email": existing_notification['sender']})
+        recipient_user = user_collection.find_one({"email": existing_notification['recipient']})
+        if sending_user and recipient_user:
+            existing_notification['recipient'] = recipient_user
+            existing_notification['sender'] = sending_user
+
+            return Notification(**existing_notification)
+        else:
+            raise HTTPException(status_code=404, detail="User not found")
+    else:
+        raise HTTPException(status_code=404, detail="Notification not found")
