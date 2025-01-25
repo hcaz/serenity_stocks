@@ -75,7 +75,7 @@ def tick_stocks():
     timestamp = time.time()
     print(timestamp)
     all_stocks = get_stocks()
-    if timestamp < all_stocks[0].historic_data[-1].date:
+    if math.ceil(timestamp) < all_stocks[0].historic_data[-1].date:
         return
 
     operations = []
@@ -92,7 +92,7 @@ def tick_stocks():
         # order influence
         stock.historic_data.append(
             DataNode(
-                date = math.ceil(timestamp),
+                date = timestamp,
                 price = int(stock.historic_data[-1].price * (1 + baseFlux)),
             )
         )

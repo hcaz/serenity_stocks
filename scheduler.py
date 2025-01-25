@@ -13,4 +13,4 @@ def ticker():
     # compute orders
     
 
-scheduler.add_job(ticker, IntervalTrigger(seconds=1))
+# scheduler.add_job(ticker, IntervalTrigger(seconds=1))
