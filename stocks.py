@@ -1,9 +1,11 @@
 import json
+import math
+import random
+import time
 from fastapi import HTTPException
+from pymongo import UpdateOne
 from Stock import DataNode, Stock
 from AtlasClient import getClient
-
-import datetime
 
 stock_collection = getClient().get_collection("serenity_stocks", "stocks")
 
@@ -59,9 +61,47 @@ def reset_stocks():
             stock = Stock(
                 name = stock_json['name'], 
                 symbol = stock_json['symbol'], 
+                category = stock_json['category'],
+                max_shares = stock_json['max_shares'],
+                available_shares = stock_json['available_shares'],
                 historic_data = historic_data,
             )
             myStocks.append(stock.dict())
 
     stock_collection.insert_many(myStocks)
+    return
+
+def tick_stocks():
+    timestamp = time.time()
+    print(timestamp)
+    all_stocks = get_stocks()
+    if timestamp < all_stocks[0].historic_data[-1].date:
+        return
+
+    operations = []
+    for stock in all_stocks:
+        # base level flux
+        baseFlux = random.uniform(-0.01, 0.01)
+
+        # category news flux
+
+        # stock news flux
+
+        # user flux
+
+        # order influence
+        stock.historic_data.append(
+            DataNode(
+                date = math.ceil(timestamp),
+                price = int(stock.historic_data[-1].price * (1 + baseFlux)),
+            )
+        )
+        newData = [data.dict() for data in stock.historic_data]
+        operations.append(
+            UpdateOne(
+                {"symbol": stock.symbol},  # Filter by stock symbol
+                {"$set": {"historic_data": newData}}  # Update historic_data
+            )
+        )
+    stock_collection.bulk_write(operations)
     return
