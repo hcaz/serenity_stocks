@@ -1,21 +1,14 @@
 from fastapi import HTTPException
 from User import User
 from AtlasClient import getClient
+from notifications import create_notification
 
 import time
 import random
+import json
 
 user_collection = getClient().get_collection("serenity_stocks", "users")
 notification_collection = getClient().get_collection("serenity_stocks", "notifications")
-
-slogans = [
-    "Play the market. Play dirty.",
-    "Risk everything. Regret nothing."
-    "The only limit is your morality.",
-    "The market doesn't care about your conscience.",
-    "Success at all costs. Morality is optional.",
-    "We'll handle the ethics. You handle the profits.",
-]
 
 def login(email: str):
     existing_user = user_collection.find_one({"email": email})
@@ -36,29 +29,7 @@ def login(email: str):
         user_dict["balance"] = 100 * 100
         result = user_collection.insert_one(user_dict)
 
-        notification_dict = {}
-        notification_dict['sender'] = email
-        notification_dict['recipient'] = email
-        notification_dict['subject'] = 'Welcome to Serenity Stocks'
-        notification_dict['message'] = """Hi there,
-
-Welcome to Serenity Stocks! We're thrilled to have you join our team.
-
-We know you're eager to get started, and we'll be sending you more information about your role and what to expect very shortly.
-
-But first, we'd love to get to know you a little better.  Could you reply to this email and let us know your name?
-
-We're excited to have you on board and can't wait to see what you'll achieve here.
-
-Best regards,
----
-
-"""+random.choice(slogans)
-        notification_dict['read_by_user'] = False
-        notification_dict['read_by_system'] = False
-        notification_dict['replies'] = []
-        notification_dict['timestamp'] = time.time()
-        notification_collection.insert_one(notification_dict)
+        create_notification('emily.hughes@serenitystocks.com', email, 'Welcome to Serenity Stocks', "We know you're eager to get started, and we'll be sending you more information about your role and what to expect very shortly.\n\nBut first, we'd love to get to know you a little better.  Could you reply to this email and let us know your name?", additionalPrompt="You should not use the players name in this email as they have not sent it yet")
 
         return User(**user_dict)
 
@@ -69,3 +40,16 @@ def profile(email: str):
         return User(**existing_user)
     else:
         raise HTTPException(status_code=404, detail="User not found")
+
+def reset_users():
+    user_collection.delete_many({})
+    notification_collection.delete_many({})
+
+    user_dict = []
+    with open("nPcs.json", "r") as json_file:
+        user_data = json.load(json_file)
+        for user_json in user_data:
+            user_dict.append(user_json)
+
+    user_collection.insert_many(user_dict)
+    return

@@ -4,7 +4,7 @@ from User import User
 from bson import ObjectId
 
 class NotificationReply(BaseModel):
-    by: str
+    sender: str
     message: str
     timestamp: float
 

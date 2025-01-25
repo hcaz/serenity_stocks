@@ -9,16 +9,17 @@ from User import User
 from UserOrder import UserOrder
 from scheduler import scheduler
 from userOrders import add_order, get_open_orders
-from users import login, profile
+from users import login, profile, reset_users
 
 from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
-from Notification import Notification
-from notifications import get_notifications, read_notification
+from Notification import Notification, NotificationReply
+from notifications import get_notifications, read_notification, reply_to_notification
 from stocks import add_stock, get_stock, get_stocks, reset_stocks
 
 # Load environment variables (including MongoDB Atlas connection string)
 config = dotenv_values(".env")
 ATLAS_URI = config["ATLAS_URI"]
+GEMINI_API_KEY = config["GEMINI_API_KEY"]
 
 app = FastAPI()
 
@@ -53,6 +54,10 @@ def add_login_endpoint(email: str):
 def get_profile_endpoint(email: str):
     return profile(email)
 
+@app.post("/users/reset")
+def reset_all_users_endpoint(): 
+    return reset_users() 
+
 @app.get("/notifications/{email}", response_model=list[Notification])
 def get_notifications_endpoint(email: str):
     return get_notifications(email)
@@ -60,6 +65,10 @@ def get_notifications_endpoint(email: str):
 @app.get("/notification/{id}/read", response_model=Notification)
 def get_notification_read_endpoint(id: str):
     return read_notification(ObjectId(id))
+
+@app.post("/notification/{id}/reply", response_model=Notification)
+def create_notification_reply_endpoint(id: str, reply: NotificationReply):
+    return reply_to_notification(ObjectId(id), reply)
 
 #Stock endpoints
 @app.get("/stocks/", response_model=list[Stock])

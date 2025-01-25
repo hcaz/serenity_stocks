@@ -11,4 +11,4 @@ def ticker():
     print(f"Running ticker at {time.time()}")
     tick_stocks()
 
-scheduler.add_job(ticker, IntervalTrigger(seconds=1))
+# scheduler.add_job(ticker, IntervalTrigger(seconds=1))
