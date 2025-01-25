@@ -5,6 +5,8 @@ from dotenv import dotenv_values
 
 from Stock import Stock
 from User import User
+from UserOrder import UserOrder
+from userOrders import add_order, get_open_orders
 from users import login, profile
 
 from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
@@ -66,3 +68,12 @@ def reset_all_stocks_endpoint(stock: Stock):
 @app.post("/stocks/tick")
 def tick_all_stocks_endpoint(stock: Stock): 
     return tick_stocks() 
+
+
+@app.get("/orders/{email}/open", response_model=list[UserOrder])
+def get_open_orders_endpoint(email: str): 
+    return get_open_orders(email) 
+
+@app.post("/orders/", response_model=UserOrder)
+def create_user_order_endpoint(order: UserOrder): 
+    return add_order(order) 
