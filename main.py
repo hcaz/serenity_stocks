@@ -7,7 +7,8 @@ from Stock import Stock
 from stocks import add_stock, get_stock, get_stocks
 from User import User
 from users import login, profile
-
+from Notification import Notification
+from notifications import get_notifications
 from stocks import add_stock, get_stock, get_stocks, reset_stocks
 
 # Load environment variables (including MongoDB Atlas connection string)
@@ -42,6 +43,10 @@ def add_login_endpoint(email: str):
 @app.get("/profile/{email}", response_model=User)
 def get_profile_endpoint(email: str):
     return profile(email)
+
+@app.get("/notifications/{email}", response_model=list[Notification])
+def get_notifications_endpoint(email: str):
+    return get_notifications(email)
 
 #Stock endpoints
 @app.get("/stocks/", response_model=list[Stock])

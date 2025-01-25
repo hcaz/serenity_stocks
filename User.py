@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from enum import Enum
 
 # Pydantic model for user data
 class User(BaseModel):
