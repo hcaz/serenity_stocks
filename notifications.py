@@ -103,7 +103,7 @@ def create_notification(sender: str, recipient: str, subject: str, message: str,
         recipientObj = User(**recipientObj)
 
         if senderObj.personality_prompt:
-            response = model.generate_content(senderObj.personality_prompt+"\n\nYour general tone is " + senderObj.tone + ". You are speaking to "+recipientObj.name+" who is a "+recipientObj.job_role+".\n\nCompose an email response  with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt. "+additionalPrompt+" You need to say the following message:\n"+message+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
+            response = model.generate_content(senderObj.personality_prompt+"\n\nYour general tone is " + senderObj.tone + ". You are speaking to "+recipientObj.name+" who is a "+recipientObj.job_role+".\n\nCompose an email response  with no subject, only the body text which should be no longer than 500 characters over multiple lines and matches your personality prompt, you should sign your email off with your name and role. "+additionalPrompt+" You need to say the following message:\n"+message+"\n\nRemember to stay within the character during the dot com boom. Use the language and tone appropriate to that era, and be mindful this game is about lack of ethics and morals which the player has to pick.")
             message = response.text
 
 
