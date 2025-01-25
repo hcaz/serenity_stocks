@@ -4,9 +4,10 @@ from pymongo import MongoClient
 from dotenv import dotenv_values
 
 from Stock import Stock
-from stocks import add_stock, get_stock, get_stocks
 from User import User
 from users import login, profile
+
+from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
 from Notification import Notification
 from notifications import get_notifications
 from stocks import add_stock, get_stock, get_stocks, reset_stocks
@@ -54,15 +55,14 @@ def get_stocks_endpoint():
     return get_stocks()
 
 
-@app.get("/stocks/{symbol}", response_model=Stock)
+@app.get("/stock/{symbol}", response_model=Stock)
 def get_stock_endpoint(symbol: str):
     return get_stock(symbol)
-
-
-@app.post("/stocks/", response_model=Stock)
-def add_stock_endpoint(stock: Stock): 
-    return add_stock(stock) 
 
 @app.post("/stocks/reset")
 def reset_all_stocks_endpoint(stock: Stock): 
     return reset_stocks() 
+
+@app.post("/stocks/tick")
+def tick_all_stocks_endpoint(stock: Stock): 
+    return tick_stocks() 

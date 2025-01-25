@@ -9,4 +9,7 @@ class DataNode(BaseModel):
 class Stock(BaseModel):
     name: str
     symbol: str
+    category: str
+    max_shares: int
+    available_shares: int
     historic_data: list[DataNode]

@@ -2,6 +2,9 @@
     {
       "name": "Amazon",
       "symbol": "AMZN",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
@@ -12,6 +15,9 @@
     {
       "name": "Yahoo",
       "symbol": "YHOO",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
@@ -22,6 +28,9 @@
     {
       "name": "eBay",
       "symbol": "EBAY",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
@@ -32,6 +41,9 @@
     {
       "name": "MySpace",
       "symbol": "MSP",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
@@ -42,6 +54,9 @@
     {
       "name": "pets.com",
       "symbol": "PCOM",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
@@ -52,6 +67,9 @@
     {
       "name": "Cisco",
       "symbol": "CSCO",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
@@ -62,6 +80,9 @@
     {
       "name": "Microsoft",
       "symbol": "MSFT",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
@@ -72,6 +93,9 @@
     {
       "name": "Apple",
       "symbol": "AAPL",
+      "category": "TECH",
+      "max_shares": 10000000,
+      "available_shares": 5000000,
       "historic_data": [
         {
           "date": 0,
