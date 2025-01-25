@@ -7,6 +7,7 @@ from bson import ObjectId
 from Stock import Stock
 from User import User
 from UserOrder import UserOrder
+from scheduler import scheduler
 from userOrders import add_order, get_open_orders
 from users import login, profile
 
@@ -35,9 +36,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.on_event("startup")
+def startup_event():
+    scheduler.start()
+
 @app.on_event("shutdown")
-async def shutdown_db_client():
-    app.mongodb_client.client.close()
+def shutdown_event():
+    scheduler.shutdown()
 
 #User endpoints
 @app.get("/login/{email}", response_model=User)
