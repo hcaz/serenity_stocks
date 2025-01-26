@@ -40,11 +40,11 @@ def get_notifications(email: str):
     else:
         raise HTTPException(status_code=404, detail="User not found")
     
-def read_notification(id: ObjectId):
-    existing_notification = notification_collection.find_one({"_id": id})
+def read_notification(id: str):
+    existing_notification = notification_collection.find_one({"id": id})
     if existing_notification:
         existing_notification["read_by_user"] = True
-        notification_collection.replace_one({"_id": id}, existing_notification)
+        notification_collection.replace_one({"id": id}, existing_notification)
         sending_user = user_collection.find_one({"email": existing_notification['sender']})
         recipient_user = user_collection.find_one({"email": existing_notification['recipient']})
         if sending_user and recipient_user:
@@ -57,14 +57,14 @@ def read_notification(id: ObjectId):
     else:
         raise HTTPException(status_code=404, detail="Notification not found")
     
-def reply_to_notification(id: ObjectId, reply: NotificationReply):
-    existing_notification = notification_collection.find_one({"_id": id})
+def reply_to_notification(id: str, reply: NotificationReply):
+    existing_notification = notification_collection.find_one({"id": id})
     if existing_notification:
         reply_dict = reply.dict()
         reply_dict['timestamp'] = time.time()
         existing_notification["replies"].append(reply_dict)
         existing_notification["read_by_user"] = True
-        notification_collection.replace_one({"_id": id}, existing_notification)
+        notification_collection.replace_one({"id": id}, existing_notification)
 
         senderObj = user_collection.find_one({"email": existing_notification['sender']})
         recipientObj = user_collection.find_one({"email": existing_notification['recipient']})
@@ -121,7 +121,7 @@ def create_notification(notif_data: NotificationDto):
                 message = response.text
 
         notification_dict = {}
-        notification_dict['id'] = uuid.uuid4()
+        notification_dict['id'] = str(uuid.uuid4())
         notification_dict['sender'] = sender
         notification_dict['recipient'] = recipient
         notification_dict['subject'] = subject
