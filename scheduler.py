@@ -19,7 +19,6 @@ news_collection  = getClient().get_collection("serenity_stocks", "news")
 is_trading_open = True
 
 def ticker():
-    print(f"Running ticker at {time.time()}")
     timestamp = math.ceil(time.time())
     daySecond = timestamp % 160
 
@@ -54,4 +53,4 @@ def ticker():
         compute_open_orders()
 
 
-scheduler.add_job(ticker, IntervalTrigger(seconds=1))
+# scheduler.add_job(ticker, IntervalTrigger(seconds=1))

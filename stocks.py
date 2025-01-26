@@ -41,7 +41,6 @@ def add_stock(stock: Stock):
     stock_dict = stock.dict()
     stock_dict["date_added"] = time.time()
     result = stock_collection.insert_one(stock_dict)
-    print(result)
     return Stock(**stock_dict)
 
 def reset_stocks():
@@ -73,7 +72,6 @@ def reset_stocks():
 
 def tick_stocks():
     timestamp = time.time()
-    print(timestamp)
     all_stocks = get_stocks()
     if math.ceil(timestamp) < all_stocks[0].historic_data[-1].date:
         return

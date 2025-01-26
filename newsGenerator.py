@@ -77,17 +77,15 @@ def generate_random_article(outlet: Optional[NewsOutlet] = None):
     buyer_info = []
     for order in recent_orders:
         order = UserOrder(**order)
-        buyer_info.append("> " + order.email + ": " + order.quantity+"\n")
+        buyer_info.append("> " + order.email + ": " + str(order.quantity)+"\n")
 
     buyer_info = ''.join(buyer_info)
 
     response = model.generate_content("You are a writer for " + outlet.name + " about movements in the stock market.\n\nYour general tone is " + outlet.tone + ". You are writing to an audience of players who are in charge of managing investment funds but the readers should never be addressed directly. You should write with a style that is " + outlet.style + ". You have the following biases: " + outlet.bias +"\n\nCompose a short article commentry on the " + target + (target_stock.name if target == "stock" else target_stock.category) + ((". It may be relevant to mentioned the top buyers of this stock, if used, please attempt to anonymise but poorly so they are still mostly readable:\n" + buyer_info) if target == "stock" else "") + ". Overall tone must be " + str(positivity) + "/5 positive. Do not include a title, only the body text which should be no longer than 250 characters over multiple lines and matches your personality prompt, you should end the article with an open ended question related to the stock.\n\nRemember to stay within the character of a writer commenting on stocks during the dot com boom. Use a language and tone appropriate to that era but in a professional manner, and be mindful this game is about lack of ethics and morals which the player has to pick.")
     body = response.text
-    print(body)
 
     response = model.generate_content("Read the following passage for a news article written by " + outlet.name + " and write a appropriate title for it. No not include anything else in your reponse.\n\n" + body)
     title = response.text
-    print(title)
 
     news = News(
         title = title,
