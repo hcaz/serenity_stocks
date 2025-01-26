@@ -167,7 +167,8 @@ def generate_podcaster_notice():
             "$gt": timestamp - 160,
         }
     })
-    new_news = News(**next(new_news))
+    new_news = list(new_news)
+    new_news = [News(**n) for n in new_news]
     users = get_active_users()
 
     all_news = ""

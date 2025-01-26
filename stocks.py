@@ -6,8 +6,10 @@ from fastapi import HTTPException
 from pymongo import UpdateOne
 from Stock import DataNode, Stock
 from AtlasClient import getClient
+from UserStock import UserStock
 
 stock_collection = getClient().get_collection("serenity_stocks", "stocks")
+user_stocks_collection = getClient().get_collection("serenity_stocks", "user_stocks")
 
 def get_stocks():
     """
@@ -18,6 +20,19 @@ def get_stocks():
     cursor = list(cursor)
     for document in cursor:
         stocks.append(Stock(**document))
+    return stocks
+
+def get_user_stocks(email: str):
+    """
+    Fetch a list of stock documents.
+    """
+    stocks = []
+    cursor = user_stocks_collection.find({
+        "email": email,
+    })
+    cursor = list(cursor)
+    for document in cursor:
+        stocks.append(UserStock(**document))
     return stocks
 
 
