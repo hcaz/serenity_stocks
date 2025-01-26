@@ -8,7 +8,7 @@ from threading import Thread
 
 from AtlasClient import getClient
 from newsGenerator import generate_random_article
-from notifications import generate_podcaster_notice
+from notifications import generate_competitor_notice, generate_podcaster_notice
 from userOrders import compute_open_orders
 from stocks import tick_stocks
 
@@ -36,7 +36,7 @@ def ticker():
 
     if random_int % 50 == 0:
         print("send message from competitor to random player. will continue same message thread")
-
+        Thread(target=generate_competitor_notice).start()
 
     if daySecond > 120:
         if is_trading_open:
@@ -50,8 +50,8 @@ def ticker():
         #         Thread(target=generate_random_article).start()
     else:
         is_trading_open = True
-        tick_stocks()
+        Thread(target=tick_stocks).start()
         compute_open_orders()
 
 
-scheduler.add_job(ticker, IntervalTrigger(seconds=1))
+scheduler.add_job(ticker, IntervalTrigger(seconds=2))

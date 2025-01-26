@@ -1,3 +1,4 @@
+import random
 from threading import Thread
 import time
 import uuid
@@ -183,3 +184,17 @@ def generate_podcaster_notice():
             subject = subject + " - Finance Forward",
             message = "Today's news in the stock market included these opinion summaries: " + all_news + "Suggest possible actions based on the summaries and ask the readers a question."
         ))).start()
+
+def generate_competitor_notice():
+    from users import get_active_users
+    users = get_active_users()
+    user = random.choice(users)
+
+    response = model.generate_content("write a subject for a email reaching out to a staff member of a compeating investment company in order to try to get them to do unethical things. subject should be vague. No not include anything else in your reponse.")
+    subject = response.text
+    Thread(target = lambda: create_notification(NotificationDto(
+        sender = "alex.wong@rivalcorp.com",
+        recipient = user.email,
+        subject = subject,
+        message = "something related to or following on from " + subject
+    ))).start()
