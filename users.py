@@ -30,8 +30,20 @@ def login(email: str):
         user_dict["balance"] = 100 * 100
         result = user_collection.insert_one(user_dict)
 
-        create_notification(NotificationDto('emily.hughes@serenitystocks.com', email, 'Welcome to Serenity Stocks', "We know you're eager to get started, and we'll be sending you more information about your role and what to expect very shortly.\n\nBut first, we'd love to get to know you a little better.  Could you reply to this email and let us know your name?", additionalPrompt="You should not use the players name in this email as they have not sent it yet"))
-        create_notification(NotificationDto('michael.rodriguez@serenitystocks.com', email, 'Intro', "Welcome, now that your on my team you better be ready to play hard and work harder! As you make more trades your daily budget will grow, its all about profit here so dont make a loss no matter what!", additionalPrompt="You should not use the players name in this email as they have not sent it yet"))
+        create_notification(NotificationDto(
+            sender='emily.hughes@serenitystocks.com',
+            recipient= email, 
+            subject='Welcome to Serenity Stocks',
+            message= "We know you're eager to get started, and we'll be sending you more information about your role and what to expect very shortly.\n\nBut first, we'd love to get to know you a little better.  Could you reply to this email and let us know your name?", 
+            additionalPrompt="You should not use the players name in this email as they have not sent it yet",
+        ))
+        create_notification(NotificationDto(
+            sender='michael.rodriguez@serenitystocks.com',
+            recipient= email, 
+            subject='Intro', 
+            message="Welcome, now that your on my team you better be ready to play hard and work harder! As you make more trades your daily budget will grow, its all about profit here so dont make a loss no matter what!", 
+            additionalPrompt="You should not use the players name in this email as they have not sent it yet",
+        ))
 
         return User(**user_dict)
 

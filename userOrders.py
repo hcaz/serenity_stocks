@@ -68,6 +68,9 @@ def compute_open_orders():
         if stock_index is None:
             continue
         stock = all_stocks[stock_index]
+        if stock.available_shares < order.quantity:
+            orders_collection.delete_one({"id": order.id})
+            continue
         stock.available_shares = stock.available_shares - order.quantity
         order.price = stock.historic_data[-1].price
         order.completed_at = time.time()
@@ -126,7 +129,7 @@ def calculate_updated_price(stock: Stock, order: UserOrder) -> int:
     if order.quantity < 0:
         pressure = -1.0 # A multiplier to adjust the impact of sell orders
 
-    order_impact = (order.quantity / stock.available_shares) * pressure
+    order_impact = (order.quantity / stock.available_shares) * pressure if stock.available_shares > 0 else 0
 
     updated_price = current_price + (current_price * order_impact * volatility_factor)
     return round(updated_price)  # Round to the nearest integer
