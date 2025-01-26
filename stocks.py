@@ -118,25 +118,22 @@ def tick_stocks():
     stock_collection.bulk_write(operations)
     return
 
-def burst_the_bubble(stocks_collection):
+def burst_the_bubble():
     """Tanks the entire stock market by drastically reducing prices."""
 
-    all_stocks = stocks_collection.find({})
+    all_stocks = stock_collection.find({})
     
     for stock in all_stocks:
-        current_price = stock.historic_data[-1].price
+        current_price = stock["historic_data"][-1]["price"]
         
-        # Calculate a large negative price impact (adjust the factor for severity)
-        crash_factor = random.uniform(0.5, 0.8)  # Reduce price by 50% to 80%
-        new_price = current_price * (1 - crash_factor) 
+        new_price = current_price * random.uniform(0.2, 0.5)
 
-        # Add a new data node with the drastically reduced price
-        stock.historic_data.append(
+        stock["historic_data"].append(
             DataNode(
                 date=time.time(),
                 price=round(new_price)
-            )
+            ).dict()
         )
 
         # Update the stock in the database
-        stocks_collection.replace_one({"symbol": stock.symbol}, stock.dict())
+        stock_collection.update_one({"symbol": stock["symbol"]}, stock)

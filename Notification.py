@@ -25,4 +25,4 @@ class NotificationDto(BaseModel):
     recipient: str
     subject: str
     message: str
-    additionalPrompt: Optional[str] = None
+    additionalPrompt: str = ""
