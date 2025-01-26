@@ -41,7 +41,6 @@ def add_order(order: UserOrder):
     order_dict["id"] = str(uuid.uuid4())
     order_dict["created_at"] = time.time()
     result = orders_collection.insert_one(order_dict)
-    print(result)
     return UserOrder(**order_dict)
 
 def compute_open_orders():
@@ -96,8 +95,6 @@ def compute_open_orders():
         orders_collection.replace_one({"id": order.id}, order.dict())
 
         newPrice = calculate_updated_price(stock, order)
-        print(newPrice)
-        print(order.price)
         stock.historic_data.append(
             DataNode(
                 date = time.time(),
