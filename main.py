@@ -8,12 +8,13 @@ from News import News
 from Stock import Stock
 from User import User
 from UserOrder import UserOrder
+from UserStock import UserStock
 from newsGenerator import generate_random_article, reset_news
 from scheduler import scheduler
 from userOrders import add_order, get_open_orders
 from users import login, profile, reset_users
 
-from stocks import burst_the_bubble, get_stock, get_stocks, reset_stocks, tick_stocks
+from stocks import burst_the_bubble, get_stock, get_stocks, get_user_stocks, reset_stocks, tick_stocks
 from Notification import Notification, NotificationDto
 from notifications import get_notifications, read_notification
 from stocks import get_stock, get_stocks, reset_stocks
@@ -57,6 +58,10 @@ def get_profile_endpoint(email: str):
 @app.post("/users/reset")
 def reset_all_users_endpoint(): 
     return reset_users() 
+
+@app.post("/users/{email}/stocks", response_model=list[UserStock])
+def get_user_stocks_endpoint(email: str): 
+    return get_user_stocks(email) 
 
 @app.post("/notification/", response_model=Notification)
 def create_notifications_endpoint(notif: NotificationDto):
