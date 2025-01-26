@@ -25,7 +25,7 @@ def ticker():
 
     # random number between 0 and 2
     random_int = random.randint(0, 1000)
-    if random_int % 3 == 0:
+    if random_int % 100 == 0:
         Thread(target=generate_random_article).start()
 
     if random_int % 10 == 0:
