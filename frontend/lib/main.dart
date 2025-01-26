@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:js';
+import 'package:chart_sparkline/chart_sparkline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_chess_board/flutter_chess_board.dart' as chess;
 import 'package:flutter_floaty/flutter_floaty.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:http/http.dart' as http;
@@ -43,18 +45,20 @@ class _MyHomePageState extends State<MyHomePage> {
       _windowLogin = true,
       _windowMail = false,
       _windowStocks = false,
-      _windowNews = false;
+      _windowNews = false,
+      _windowChess = false;
 
-  List<String> _windowOrder = ['mail', 'stock', 'news'];
+  List<String> _windowOrder = ['news', 'chess', 'mail', 'stock'];
 
   final TextEditingController _screenNameController =
       TextEditingController(text: 'zach@example.com');
   final FocusNode _screenNameFocusNode = FocusNode();
+  chess.ChessBoardController controller = chess.ChessBoardController();
 
   JsObject clippytContext = context;
 
-  Map<String, dynamic>? _userData, _currentMessage;
-  List<dynamic>? _notifications;
+  Map<String, dynamic>? _userData, _currentMessage, _currentStock, _currentNews;
+  List<dynamic>? _notifications, _stocks, _news;
 
   @override
   void initState() {
@@ -77,6 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _timeString = formattedDateTime;
     });
+
+    if (now.second % 20 == 0) {
+      if(_windowMail) _getMail();
+      if(_windowMail) _getNews();
+      if(_windowStocks) _getStocks();
+    }
   }
 
   void _login() async {
@@ -100,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       _windowLogin = false;
+      _windowChess = true;
     });
 
     try {
@@ -163,7 +174,6 @@ class _MyHomePageState extends State<MyHomePage> {
       print(s);
 
       setState(() {
-        _windowMail = false;
         _windowLogin = true;
       });
     }
@@ -172,10 +182,57 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _windowStocks = true;
     });
+
+    try {
+      // Do a get request
+      http.Response response = await http.get(Uri.parse(
+          '$_apiEndpoint/stocks'));
+      if (response.statusCode == 200) {
+        List<dynamic> _tmpStocks = jsonDecode(response.body);
+
+        _tmpStocks.forEach((element) {
+          List<dynamic> _priceHistory = element['historic_data'] ?? [];
+
+          _priceHistory.sort((a, b) => a['date'].compareTo(b['date']));
+
+          int _limit = 260;
+          if(_priceHistory.length > _limit) {
+            _priceHistory = _priceHistory.sublist(_priceHistory.length - _limit);
+          }
+
+          List<double> _data = [];
+          for(int i = 0; i < _priceHistory.length; i++) {
+            _data.add(_priceHistory[i]['price'] / 100);
+          }
+
+          element['history_data'] = _data;
+          element['current_price'] = _priceHistory.last['price'] / 100;
+          element['direction'] = _priceHistory.last['price'] > _priceHistory[_priceHistory.length - 2]['price'] ? 'up' : 'down';
+          element['historic_data'] = null;
+        });
+
+        setState(() {
+          _stocks = _tmpStocks;
+        });
+      } else {
+        throw Exception('Error getting stocks');
+      }
+    } catch (e, s) {
+      clippytContext.callMethod('clippySpeak',
+          ['There was an error getting your stocks! Please try again.']);
+
+      print(e);
+      print(s);
+
+      setState(() {
+        _windowLogin = true;
+      });
+    }
   }
   void _getNews() async {
     setState(() {
       _windowNews = true;
+      _news = null;
     });
   }
 
@@ -670,6 +727,126 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                       ),
+
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: SingleChildScrollView(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _stocks?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(color: Colors.black)),
+                                  ),
+                                  child: Column(children: [
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: Colors.white,
+                                        child: Image.network(
+                                            'https://raw.githubusercontent.com/davidepalazzo/ticker-logos/refs/heads/main/ticker_icons/' +
+                                                (_stocks?[index]['symbol'] ?? '')+'.png', errorBuilder: (context, error, stackTrace) {
+                                                  return Container();
+                                                }),
+                                      ),
+                                      title: Text(_stocks?[index]['name'] ?? ''),
+                                      subtitle: Text(
+                                          '${_stocks?[index]['category'] ?? ''} : ${_stocks?[index]['symbol'] ?? ''}'),
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                              '\£${_stocks?[index]['current_price'] ?? 0}', style: TextStyle(color: _stocks?[index]['direction'] == 'up' ? Colors.green : Colors.red, fontSize: 20)),
+                                          Icon(_stocks?[index]['direction'] == 'up' ? Icons.trending_up : Icons.trending_down, color: _stocks?[index]['direction'] == 'up' ? Colors.green : Colors.red),
+                                        ],
+                                      ),
+                                      onTap: () async {
+                                        setState(() {
+                                          _currentStock = _stocks?[index];
+                                        });
+                                      },
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Sparkline(
+                                            data: _stocks?[index]['history_data'] ?? [],
+                                            gridLinelabelPrefix: '\£',
+                                            gridLineColor: Colors.grey,
+                                            gridLinesEnable: true,
+                                            fillMode: FillMode.below,
+                                            lineColor: _stocks?[index]['direction'] == 'up' ? Colors.green : Colors.red,
+                                            fillColor: _stocks?[index]['direction'] == 'up' ? Colors.green[200]! : Colors.red[200]!,
+                                          ),
+                                        ),
+                                        SizedBox(width: 10),
+                                        SizedBox(
+                                          width: 110,
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                            GestureDetector(
+                                              onTap: _getMail,
+                                              child: Container(
+                                                width: 95,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.green[900],
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.file_upload,
+                                                        color: Colors.white),
+                                                    Text('BUY',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: _getMail,
+                                              child: Container(
+                                                width: 95,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red[900],
+                                                ),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                                  children: [
+                                                    Icon(Icons.file_download,
+                                                        color: Colors.white),
+                                                    Text('SELL',
+                                                        style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 16)),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],),
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(height: 30),
+                                  ],)
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -743,6 +920,85 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                shadow: BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  spreadRadius: 5,
+                  blurRadius: 7,
+                  offset: Offset(0, 3), // changes position of shadow
+                ),
+                backgroundColor: Colors.grey[50]!,
+                onDragBackgroundColor: Colors.grey[200]!,
+              ),
+            ),
+            Indexed(
+              index: _windowOrder.indexOf('chess'),
+              child: FlutterFloaty(
+                isVisible: _windowChess,
+                intrinsicBoundaries: Rect.fromLTWH(
+                  0,
+                  0,
+                  MediaQuery.of(context).size.width,
+                  MediaQuery.of(context).size.height,
+                ),
+                enableAnimation: false,
+                height: 540,
+                width: 500,
+                initialX: (MediaQuery.of(context).size.width / 2) - 700,
+                initialY: (MediaQuery.of(context).size.height / 2) - 550,
+                onTap: () {
+                  clippytContext.callMethod('clippySpeak', ['Hey, this does not look like work, get back to making money!']);
+                  setState(() {
+                    _windowOrder.remove('chess');
+                    _windowOrder.add('chess');
+                  });
+                },
+                builder: (context) => Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [Color(0xFF245DDA), Color(0xFF0D47DB)],
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter),
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(width: 5),
+                            Icon(Icons.gamepad, color: Colors.yellow),
+                            SizedBox(width: 5),
+                            Text('Chess',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontStyle: FontStyle.italic)),
+                            Spacer(),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(5),
+                                border:
+                                Border.all(color: Colors.white, width: 1),
+                              ),
+                              child: Icon(Icons.close, color: Colors.white),
+                            ),
+                            SizedBox(width: 5),
+                          ],
+                        ),
+                      ),
+                      chess.ChessBoard(
+                        controller: controller,
+                        boardColor: chess.BoardColor.orange,
+                        boardOrientation: chess.PlayerColor.white,
+                      )
                     ],
                   ),
                 ),
@@ -917,6 +1173,48 @@ class _MyHomePageState extends State<MyHomePage> {
                         Text('Latest News',
                             style:
                                 TextStyle(color: Colors.white, fontSize: 20)),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _windowChess,
+                child: GestureDetector(
+                  onTap: () {
+                    clippytContext.callMethod('clippySpeak', ['Hey, this does not look like work, get back to making money!']);
+                    setState(() {
+                      _windowOrder.remove('chess');
+                      _windowOrder.add('chess');
+                    });
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 1,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(5),
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF0D47DB), Color(0xFF072C8A)],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.gamepad, color: Colors.white),
+                        SizedBox(width: 5),
+                        Text('Chess',
+                            style:
+                            TextStyle(color: Colors.white, fontSize: 20)),
                       ],
                     ),
                   ),

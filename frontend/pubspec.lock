@@ -41,6 +41,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  chess:
+    dependency: transitive
+    description:
+      name: chess
+      sha256: "69dd13135d2ad3fb523483488db811d4aea2e550bfd6454e93ceccaf042a8614"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.0"
+  chess_vectors_flutter:
+    dependency: transitive
+    description:
+      name: chess_vectors_flutter
+      sha256: "5d9d013d2f1340bde1fda15d915262a420f75ff7f1e219860cb364073e5a3456"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   clock:
     dependency: transitive
     description:
@@ -78,6 +94,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_chess_board:
+    dependency: "direct main"
+    description:
+      name: flutter_chess_board
+      sha256: f830a44acca1aec751bd4de551f1e5ac466d8bb67e6476e325c5b693398d5755
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   flutter_floaty:
     dependency: "direct main"
     description:
@@ -147,6 +171,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.8"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.20.2"
+  jiffy:
+    dependency: "direct main"
+    description:
+      name: jiffy
+      sha256: "1c1b86459969ff9f32dc5b0ffe392f1e08181e66396cf9dd8fa7c90552a691af"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.3.2"
   leak_tracker:
     dependency: transitive
     description:
