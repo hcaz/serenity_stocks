@@ -5,6 +5,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 
 from AtlasClient import getClient
+from newsGenerator import generate_random_article
 from userOrders import compute_open_orders
 from stocks import tick_stocks
 
@@ -12,33 +13,25 @@ from stocks import tick_stocks
 scheduler = BackgroundScheduler()
 news_collection  = getClient().get_collection("serenity_stocks", "news")
 
+is_trading_open = True
+
 def ticker():
     print(f"Running ticker at {time.time()}")
     timestamp = math.ceil(time.time())
     daySecond = timestamp % 160
     if daySecond > 120:
-        if daySecond < 130:
-            # fetch all news for this day
-            all_news = news_collection.find({
-                "timestamp": {
-                    "$gt": timestamp - daySecond,
-                    "$lt": timestamp - daySecond + 160,
-                }
-            })
-            all_news = list(all_news)
-            if len(all_news) > 0:
-                random_int = random.randint(0, (len(all_news)^2) + 1)
-                if random_int == 1:
-                    # if n docs returned chance to generate = 1/(n^2+1)
-                    print("Generating more news")
-            else:
-                print("Generating first news")
-                # first run
-                # realocate budgets
-                # if none returned generate new
-        return
-    tick_stocks()
-    compute_open_orders()
+        if is_trading_open:
+            is_trading_open = False
+            generate_random_article()
+        else:
+            random_int = random.randint(0, ((daySecond-119)^2) + 1)
+            if random_int == 1:
+                # if n docs returned chance to generate = 1/(n^2+1)
+                generate_random_article()
+    else:
+        is_trading_open = True
+        tick_stocks()
+        compute_open_orders()
 
 
 # scheduler.add_job(ticker, IntervalTrigger(seconds=4))
