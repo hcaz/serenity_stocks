@@ -1,6 +1,7 @@
 import json
 import time
 from typing import Optional
+import uuid
 from dotenv import dotenv_values
 from fastapi import HTTPException
 from pydantic import BaseModel
@@ -120,6 +121,7 @@ def create_notification(notif_data: NotificationDto):
                 message = response.text
 
         notification_dict = {}
+        notification_dict['id'] = uuid.uuid4()
         notification_dict['sender'] = sender
         notification_dict['recipient'] = recipient
         notification_dict['subject'] = subject

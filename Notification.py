@@ -10,6 +10,7 @@ class NotificationReply(BaseModel):
 
 # Pydantic model for notification data
 class Notification(BaseModel):
+    id: Optional[str] = None
     sender: User
     recipient: User
     subject: str
