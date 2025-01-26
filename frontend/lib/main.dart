@@ -208,6 +208,7 @@ class _MyHomePageState extends State<MyHomePage> {
           element['history_data'] = _data;
           element['current_price'] = _priceHistory.last['price'] / 100;
           element['direction'] = _priceHistory.last['price'] > _priceHistory[_priceHistory.length - 2]['price'] ? 'up' : 'down';
+          element['direction_percent'] = (((_priceHistory.last['price'] - _priceHistory[_priceHistory.length - 2]['price']) / _priceHistory[_priceHistory.length - 2]['price']) * 100).toStringAsFixed(2);
           element['historic_data'] = null;
         });
 
@@ -759,6 +760,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                         children: [
                                           Text(
                                               '\£${_stocks?[index]['current_price'] ?? 0}', style: TextStyle(color: _stocks?[index]['direction'] == 'up' ? Colors.green : Colors.red, fontSize: 20)),
+                                          SizedBox(width: 15),
+                                          Text(
+                                              '${_stocks?[index]['direction_percent'] ?? 0}%', style: TextStyle(color: _stocks?[index]['direction'] == 'up' ? Colors.green : Colors.red, fontSize: 20)),
                                           Icon(_stocks?[index]['direction'] == 'up' ? Icons.trending_up : Icons.trending_down, color: _stocks?[index]['direction'] == 'up' ? Colors.green : Colors.red),
                                         ],
                                       ),
