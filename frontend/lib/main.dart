@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   late Timer _timer;
 
-  bool _clippyInit = false, _windowLogin = true, _windowMail = false;
+  bool _clippyInit = false, _windowLogin = true, _windowMail = false, _windowStocks = false, _windowNews = false;
 
   final TextEditingController _screenNameController = TextEditingController(text: 'zach@example.com');
   final FocusNode _screenNameFocusNode = FocusNode();
@@ -454,11 +454,13 @@ class _MyHomePageState extends State<MyHomePage> {
                                     leading: Icon(Icons.mail, color: _notifications?[index]['read_by_user'] == true ? Colors.grey : Colors.blue),
                                     title: Text(_notifications?[index]['subject'] ?? ''),
                                     subtitle: Text("${_notifications?[index]['sender']['name'] ?? ''}\n${_notifications?[index]['sender']['timestamp'] ?? ''}"),
-                                    onTap: () {
+                                    onTap: () async {
                                       setState(() {
+                                        _notifications?[index]['read_by_user'] = true;
                                         _currentMessage = _notifications?[index];
                                       });
-                                      http.get(Uri.parse('$_apiEndpoint/notification/${_notifications?[index]['id']}/read'));
+                                      http.Response resonce = await http.get(Uri.parse('$_apiEndpoint/notification/${_notifications?[index]['id']}/read'));
+                                      print(resonce.body);
                                     },
                                   );
                                 },
@@ -523,6 +525,128 @@ class _MyHomePageState extends State<MyHomePage> {
             onDragBackgroundColor: Colors.grey[200]!,
           ),
 
+          FlutterFloaty(
+            isVisible: _windowStocks,
+            intrinsicBoundaries: Rect.fromLTWH(0, 0, MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height,
+            ),
+            enableAnimation: false,
+            height: 900,
+            width: 1200,
+            initialX: (MediaQuery.of(context).size.width / 2) - 650,
+            initialY: (MediaQuery.of(context).size.height / 2) - 550,
+            builder: (context) => Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF245DDA), Color(0xFF0D47DB)],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 5),
+                        Icon(Icons.attach_money, color: Colors.yellow),
+                        SizedBox(width: 5),
+                        Text('Serenity Stock Terminal',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontStyle: FontStyle.italic)),
+                        Spacer(),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.white, width: 1),
+                          ),
+                          child: Icon(Icons.close, color: Colors.white),
+                        ),
+                        SizedBox(width: 5),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            shadow: BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+            backgroundColor: Colors.grey[50]!,
+            onDragBackgroundColor: Colors.grey[200]!,
+          ),
+
+          FlutterFloaty(
+            isVisible: _windowNews,
+            intrinsicBoundaries: Rect.fromLTWH(0, 0, MediaQuery.of(context).size.width,
+              MediaQuery.of(context).size.height,
+            ),
+            enableAnimation: false,
+            height: 900,
+            width: 1200,
+            initialX: (MediaQuery.of(context).size.width / 2) - 700,
+            initialY: (MediaQuery.of(context).size.height / 2) - 550,
+            builder: (context) => Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Column(
+                children: [
+                  Container(
+                    height: 40,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [Color(0xFF245DDA), Color(0xFF0D47DB)],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter),
+                    ),
+                    child: Row(
+                      children: [
+                        SizedBox(width: 5),
+                        Icon(Icons.newspaper, color: Colors.yellow),
+                        SizedBox(width: 5),
+                        Text('Latest News',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontStyle: FontStyle.italic)),
+                        Spacer(),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(color: Colors.white, width: 1),
+                          ),
+                          child: Icon(Icons.close, color: Colors.white),
+                        ),
+                        SizedBox(width: 5),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            shadow: BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
+            ),
+            backgroundColor: Colors.grey[50]!,
+            onDragBackgroundColor: Colors.grey[200]!,
+          ),
+
         ]),
         bottomNavigationBar: Container(
           decoration: BoxDecoration(
@@ -562,6 +686,109 @@ class _MyHomePageState extends State<MyHomePage> {
                             fontSize: 20,
                             fontStyle: FontStyle.italic)),
                   ],
+                ),
+              ),
+              SizedBox(width: 5),
+              Visibility(
+                visible: _windowMail,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 1,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(5),
+                    gradient: LinearGradient(
+                        colors: [Color(0xFF0D47DB), Color(0xFF072C8A)],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.mail, color: Colors.white),
+                      SizedBox(width: 5),
+                      Text('E-Mail',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20)),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _windowStocks,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 1,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(5),
+                    gradient: LinearGradient(
+                        colors: [Color(0xFF0D47DB), Color(0xFF072C8A)],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.attach_money, color: Colors.white),
+                      SizedBox(width: 5),
+                      Text('Serenity Stock Terminal',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20)),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: _windowNews,
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 1,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(5),
+                    gradient: LinearGradient(
+                        colors: [Color(0xFF0D47DB), Color(0xFF072C8A)],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.newspaper, color: Colors.white),
+                      SizedBox(width: 5),
+                      Text('Latest News',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20)),
+                    ],
+                  ),
                 ),
               ),
               Spacer(),
