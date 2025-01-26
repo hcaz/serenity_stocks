@@ -14,7 +14,7 @@ from userOrders import add_order, get_open_orders
 from users import login, profile, reset_users
 
 from stocks import burst_the_bubble, get_stock, get_stocks, reset_stocks, tick_stocks
-from Notification import Notification
+from Notification import Notification, NotificationDto
 from notifications import get_notifications, read_notification
 from stocks import get_stock, get_stocks, reset_stocks
 from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
@@ -58,9 +58,9 @@ def get_profile_endpoint(email: str):
 def reset_all_users_endpoint(): 
     return reset_users() 
 
-@app.post("/notification/{sender}/{recipient}", response_model=Notification)
-def create_notifications_endpoint(sender: str, recipient: str, subject: str, message: str):
-    return create_notification(sender, recipient, subject, message)
+@app.post("/notification/", response_model=Notification)
+def create_notifications_endpoint(notif: NotificationDto):
+    return create_notification(notif)
 
 @app.get("/notifications/{email}", response_model=list[Notification])
 def get_notifications_endpoint(email: str):
@@ -68,11 +68,11 @@ def get_notifications_endpoint(email: str):
 
 @app.get("/notification/{id}/read", response_model=Notification)
 def get_notification_read_endpoint(id: str):
-    return read_notification(ObjectId(id))
+    return read_notification(id)
 
 @app.post("/notification/{id}/reply", response_model=Notification)
 def create_notification_reply_endpoint(id: str, reply: NotificationReply):
-    return reply_to_notification(ObjectId(id), reply)
+    return reply_to_notification(id, reply)
 
 #Stock endpoints
 @app.get("/stocks/", response_model=list[Stock])

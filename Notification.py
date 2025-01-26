@@ -10,6 +10,7 @@ class NotificationReply(BaseModel):
 
 # Pydantic model for notification data
 class Notification(BaseModel):
+    id: Optional[str] = None
     sender: User
     recipient: User
     subject: str
@@ -18,3 +19,10 @@ class Notification(BaseModel):
     read_by_system: Optional[bool] = False
     replies: Optional[list[NotificationReply]] = []
     timestamp: Optional[float]
+
+class NotificationDto(BaseModel):
+    sender: str
+    recipient: str
+    subject: str
+    message: str
+    additionalPrompt: Optional[str] = None
