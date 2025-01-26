@@ -136,4 +136,4 @@ def burst_the_bubble():
         )
 
         # Update the stock in the database
-        stock_collection.update_one({"symbol": stock["symbol"]}, stock)
+        stock_collection.update_one({"symbol": stock["symbol"]}, {"$set":stock})
