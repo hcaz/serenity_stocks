@@ -132,7 +132,7 @@ def create_notification(notif_data: NotificationDto):
         notification_dict['timestamp'] = time.time()
         id = notification_collection.insert_one(notification_dict).inserted_id
 
-        if (recipientObj.personality_prompt):
+        if recipientObj.personality_prompt and not senderObj.personality_prompt:
                 #If this is a response to an action we need to handle it here
 
                 previous_messages = []

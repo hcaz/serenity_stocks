@@ -3,6 +3,8 @@ import random
 import time
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.interval import IntervalTrigger
+from threading import Thread
+
 
 from AtlasClient import getClient
 from newsGenerator import generate_random_article
@@ -19,15 +21,33 @@ def ticker():
     print(f"Running ticker at {time.time()}")
     timestamp = math.ceil(time.time())
     daySecond = timestamp % 160
+
+    # random number between 0 and 2
+    random_int = random.randint(0, 1000)
+    if random_int % 3 == 0:
+        Thread(target=generate_random_article).start()
+
+    if random_int % 10 == 0:
+        print("send message from clippy to random group of players")
+
+    if random_int % 50 == 0:
+        print("send message from conspirator to random player that hasn't been engaged with them yet")
+
+    if random_int % 50 == 0:
+        print("send message from conspirator to random player. will continue same message thread")
+
+
     if daySecond > 120:
         if is_trading_open:
             is_trading_open = False
-            generate_random_article()
+            Thread(target=generate_random_article).start()
+            # TODO: generate notifications
         else:
             random_int = random.randint(0, ((daySecond-119)^2) + 1)
             if random_int == 1:
                 # if n docs returned chance to generate = 1/(n^2+1)
-                generate_random_article()
+                # TODO: generate notifications
+                Thread(target=generate_random_article).start()
     else:
         is_trading_open = True
         tick_stocks()

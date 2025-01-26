@@ -57,3 +57,15 @@ def reset_users():
     return
 
 # def reallocate_budgets():
+
+
+def getCurrentPlayers():
+    timestamp = time.time()
+    users = user_collection.find({
+        "last_seen": {
+            "$gt": timestamp - 160,
+        }
+    })
+    users = list(users)
+    users = [User(**document) for document in users]
+    return users
