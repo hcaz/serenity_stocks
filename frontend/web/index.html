@@ -35,7 +35,7 @@
   <!-- Add the stylesheet to the head -->
   <link rel="stylesheet" type="text/css" href="clippy.css">
 </head>
-<body>
+<body bgcolor="black">
   <script src="flutter_bootstrap.js" async></script>
 
   <script src="clippy.js"></script>
@@ -43,6 +43,13 @@
   <script>
     window.clippyInit = function(){ clippy.init(); }
     window.clippySpeak = function(message){ clippy.displayMessage(message); }
+
+    window.darkOpacity = 1;
+
+    window.toggleDarkMode = function(){
+        window.darkOpacity = window.darkOpacity * 0.9;
+        document.getElementsByTagName('flutter-view')[0].style.opacity = window.darkOpacity;
+    }
   </script>
 </body>
 </html>
