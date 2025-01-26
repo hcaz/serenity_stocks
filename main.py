@@ -74,11 +74,11 @@ def get_notifications_endpoint(email: str):
 
 @app.get("/notification/{id}/read", response_model=Notification)
 def get_notification_read_endpoint(id: str):
-    return read_notification(ObjectId(id))
+    return read_notification(id)
 
 @app.post("/notification/{id}/reply", response_model=Notification)
 def create_notification_reply_endpoint(id: str, reply: NotificationReply):
-    return reply_to_notification(ObjectId(id), reply)
+    return reply_to_notification(id, reply)
 
 #Stock endpoints
 @app.get("/stocks/", response_model=list[Stock])
