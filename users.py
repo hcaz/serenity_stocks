@@ -58,8 +58,7 @@ def reset_users():
 
 # def reallocate_budgets():
 
-
-def getCurrentPlayers():
+def get_active_users():
     timestamp = time.time()
     users = user_collection.find({
         "last_seen": {

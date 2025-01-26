@@ -8,6 +8,7 @@ from threading import Thread
 
 from AtlasClient import getClient
 from newsGenerator import generate_random_article
+from notifications import generate_podcaster_notice
 from userOrders import compute_open_orders
 from stocks import tick_stocks
 
@@ -34,24 +35,23 @@ def ticker():
         print("send message from conspirator to random player that hasn't been engaged with them yet")
 
     if random_int % 50 == 0:
-        print("send message from conspirator to random player. will continue same message thread")
+        print("send message from competitor to random player. will continue same message thread")
 
 
     if daySecond > 120:
         if is_trading_open:
             is_trading_open = False
-            Thread(target=generate_random_article).start()
-            # TODO: generate notifications
-        else:
-            random_int = random.randint(0, ((daySecond-119)^2) + 1)
-            if random_int == 1:
-                # if n docs returned chance to generate = 1/(n^2+1)
-                # TODO: generate notifications
-                Thread(target=generate_random_article).start()
+            Thread(target=generate_podcaster_notice).start()
+        # else:
+        #     random_int = random.randint(0, ((daySecond-119)^2) + 1)
+        #     if random_int == 1:
+        #         # if n docs returned chance to generate = 1/(n^2+1)
+        #         # TODO: generate notifications
+        #         Thread(target=generate_random_article).start()
     else:
         is_trading_open = True
         tick_stocks()
         compute_open_orders()
 
 
-# scheduler.add_job(ticker, IntervalTrigger(seconds=4))
+scheduler.add_job(ticker, IntervalTrigger(seconds=1))
