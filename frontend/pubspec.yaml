@@ -13,6 +13,8 @@ dependencies:
   flutter_floaty: ^0.2.0
   gpt_markdown: ^1.0.6
   http: ^1.3.0
+  chart_sparkline: ^1.1.1
+  indexed: ^0.0.8
 
 dev_dependencies:
   flutter_test:
