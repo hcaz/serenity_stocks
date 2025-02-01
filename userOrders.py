@@ -1,7 +1,6 @@
 import time
 import uuid
 
-from bson import ObjectId
 from fastapi import HTTPException
 from pymongo import UpdateOne
 from AtlasClient import getClient

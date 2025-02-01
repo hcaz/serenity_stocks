@@ -2,7 +2,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 from dotenv import dotenv_values
-from bson import ObjectId
 
 from News import News
 from Stock import Stock

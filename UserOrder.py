@@ -1,5 +1,4 @@
 from typing import Optional, Any
-from bson import ObjectId
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic_core import core_schema
 
