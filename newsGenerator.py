@@ -6,10 +6,10 @@ import time
 from typing import Optional
 from dotenv import dotenv_values
 from AtlasClient import getClient
-from News import News
-from NewsOutlet import NewsOutlet
-from Stock import Stock
-from UserOrder import UserOrder
+from models.News import News
+from models.NewsOutlet import NewsOutlet
+from models.Stock import StockInstance
+from models.UserOrder import UserOrder
 import google.generativeai as genai
 
 
@@ -20,7 +20,7 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 
 news_outlets_collection = getClient().get_collection("serenity_stocks", "news_outlets")
 news_collection = getClient().get_collection("serenity_stocks", "news")
-stocks_collection = getClient().get_collection("serenity_stocks", "stocks")
+stock_instances_collection = getClient().get_collection("serenity_stocks", "stock_instances")
 user_orders_collection = getClient().get_collection("serenity_stocks", "user_orders")
 
 def reset_news():
@@ -58,10 +58,10 @@ def generate_random_article(outlet: Optional[NewsOutlet] = None):
     
     timestamp = math.ceil(time.time())
     daySecond = timestamp % 160
-    target_stock = stocks_collection.aggregate([
+    target_stock = stock_instances_collection.aggregate([
         {"$sample": {"size": 1}}
     ])
-    target_stock = Stock(**next(target_stock))
+    target_stock = StockInstance(**next(target_stock))
     recent_orders = user_orders_collection.find({
         "symbol": target_stock.symbol,
         "completed_at": {

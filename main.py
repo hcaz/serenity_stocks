@@ -1,26 +1,21 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pymongo import MongoClient
 from dotenv import dotenv_values
 
-from News import News
-from Stock import Stock
-from User import User
-from UserOrder import UserOrder
-from UserStock import UserStock
+from models.News import News
+from models.Stock import StockInstance
+from models.User import User
+from models.UserOrder import UserOrder
+from models.UserStock import UserStock
+from models.Notification import Notification, NotificationDto, NotificationReply
+
 from newsGenerator import generate_random_article, reset_news
-from scheduler import scheduler
 from userOrders import add_order, get_open_orders
 from users import login, profile, reset_users
-
 from stocks import burst_the_bubble, get_stock, get_stocks, get_user_stocks, reset_stocks, tick_stocks
-from Notification import Notification, NotificationDto
-from notifications import get_notifications, read_notification
-from stocks import get_stock, get_stocks, reset_stocks
-from stocks import get_stock, get_stocks, reset_stocks, tick_stocks
-from Notification import Notification, NotificationReply
 from notifications import get_notifications, read_notification, reply_to_notification, create_notification
-from stocks import add_stock, get_stock, get_stocks, reset_stocks
+
+from scheduler import scheduler
 
 # Load environment variables (including MongoDB Atlas connection string)
 config = dotenv_values(".env")
@@ -79,21 +74,21 @@ def create_notification_reply_endpoint(id: str, reply: NotificationReply):
     return reply_to_notification(id, reply)
 
 #Stock endpoints
-@app.get("/stocks/", response_model=list[Stock])
+@app.get("/stocks/", response_model=list[StockInstance])
 def get_stocks_endpoint():
     return get_stocks()
 
 
-@app.get("/stock/{symbol}", response_model=Stock)
+@app.get("/stock/{symbol}", response_model=StockInstance)
 def get_stock_endpoint(symbol: str):
     return get_stock(symbol)
 
 @app.post("/stocks/reset")
-def reset_all_stocks_endpoint(stock: Stock): 
+def reset_all_stocks_endpoint(stock: StockInstance): 
     return reset_stocks() 
 
 @app.post("/stocks/tick")
-def tick_all_stocks_endpoint(stock: Stock): 
+def tick_all_stocks_endpoint(stock: StockInstance): 
     return tick_stocks() 
 
 

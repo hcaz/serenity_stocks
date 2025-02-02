@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 
-from User import User
+from models.User import User
 
 class NotificationReply(BaseModel):
     sender: str

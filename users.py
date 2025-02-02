@@ -1,6 +1,6 @@
 from fastapi import HTTPException
-from Notification import NotificationDto
-from User import User
+from models.Notification import NotificationDto
+from models.User import User
 from AtlasClient import getClient
 from notifications import create_notification
 

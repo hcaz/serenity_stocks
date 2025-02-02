@@ -4,9 +4,9 @@ import uuid
 from fastapi import HTTPException
 from pymongo import UpdateOne
 from AtlasClient import getClient
-from Stock import DataNode, Stock
-from UserOrder import UserOrder
-from UserStock import UserStock
+from models.Stock import DataNode, Stock
+from models.UserOrder import UserOrder
+from models.UserStock import UserStock
 
 orders_collection = getClient().get_collection("serenity_stocks", "user_orders")
 user_stocks_collection = getClient().get_collection("serenity_stocks", "user_stocks")

@@ -54,4 +54,4 @@ def ticker():
         compute_open_orders()
 
 
-scheduler.add_job(ticker, IntervalTrigger(seconds=2))
+# scheduler.add_job(ticker, IntervalTrigger(seconds=2))

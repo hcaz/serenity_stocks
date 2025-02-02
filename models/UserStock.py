@@ -1,6 +1,6 @@
 from typing import Optional, Any
 from pydantic import BaseModel
-from UserOrder import UserOrder
+from models.UserOrder import UserOrder
 
 class UserStock(BaseModel):
     email: str

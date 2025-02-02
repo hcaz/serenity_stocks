@@ -13,3 +13,12 @@ class Stock(BaseModel):
     max_shares: int
     available_shares: int
     historic_data: list[DataNode]
+
+class StockInstance(BaseModel):
+    name: str
+    symbol: str
+    category: str
+    max_shares: int
+    available_shares: int
+    date: float
+    price: int

@@ -4,9 +4,9 @@ import time
 import uuid
 from dotenv import dotenv_values
 from fastapi import HTTPException
-from News import News
-from Notification import Notification, NotificationReply, NotificationDto
-from User import User
+from models.News import News
+from models.Notification import Notification, NotificationReply, NotificationDto
+from models.User import User
 from AtlasClient import getClient
 import google.generativeai as genai
 
